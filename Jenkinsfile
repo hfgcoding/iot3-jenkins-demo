@@ -2,8 +2,8 @@ pipeline {
   agent any
   environment {
        PM2 = "/home/phlo/.nvm/versions/node/v14.15.4/bin/pm2"
-       BASE = "/srv/"        
-   }
+       BASE = "/srv/"   
+  }
   stages {
     stage('Checkout') {
       steps {
