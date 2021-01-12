@@ -1,34 +1,26 @@
 pipeline {
-  agent {
-    docker {
-      image 'node:6-alpine'
-      args '-p 3000:3000'
+  agent any
+  stages {
+    stage('Checkout') {
+      checkout scm
     }
 
-  }
-  stages {
+    stage('Transfer') {
+      steps {
+        sshPublisher(publishers: [sshPublisherDesc(configName: 'test kube', transfers: [sshTransfer(cleanRemote: true, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: true, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/srv/myusername', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+      }
+    }
+
     stage('Build') {
       steps {
-        sh 'npm install'
+        sshPublisher(publishers: [sshPublisherDesc(configName: 'test kube', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'npm install', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/srv/myusername', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
       }
     }
 
-    stage('Test') {
+    stage('Start') {
       steps {
-        sh './jenkins/scripts/test.sh'
+        sshPublisher(publishers: [sshPublisherDesc(configName: 'test kube', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: 'pm2 start index.js', execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '/srv/myusername', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
       }
     }
-
-    stage('Deliver') {
-      steps {
-        sh './jenkins/scripts/deliver.sh'
-        input 'Finished using the web site? (Click "Proceed" to continue)'
-        sh './jenkins/scripts/kill.sh'
-      }
-    }
-
-  }
-  environment {
-    CI = 'true'
   }
 }
