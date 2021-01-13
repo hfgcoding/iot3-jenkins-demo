@@ -32,7 +32,7 @@ pipeline {
       steps {
         wrap([$class: 'BuildUser']) {
           sshPublisher(publishers: [sshPublisherDesc(configName: "$TARGET", transfers: [sshTransfer(cleanRemote: false, excludes: '', 
-          execCommand: "cd ${BASE}${JOB_NAME} && ${PM2} delete ${JOB_NAME} || : && ${PM2} start index.js -i 1 --name ${JOB_NAME}", 
+          execCommand: "cd ${BASE}${JOB_NAME} && ${PM2} delete ${JOB_NAME} || : && ${PM2} start index.js --name ${JOB_NAME}", 
           execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '',  remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true, usePty:true)])
         }
       }
