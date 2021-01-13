@@ -15,7 +15,7 @@ pipeline {
     stage('Transfer') {      
       steps {
         wrap([$class: 'BuildUser']) {
-          sshPublisher(publishers: [sshPublisherDesc(configName: "$TARGET", transfers: [sshTransfer(cleanRemote: true, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: true, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: "${BASE}${JOB_NAME}/", remoteDirectorySDF: false, removePrefix: '', sourceFiles: '*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
+          sshPublisher(publishers: [sshPublisherDesc(configName: "$TARGET", transfers: [sshTransfer(cleanRemote: true, excludes: '', execCommand: '', execTimeout: 120000, flatten: false, makeEmptyDirs: true, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: "${BASE}${JOB_NAME}/", remoteDirectorySDF: false, removePrefix: '', sourceFiles: '**/*')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: true)])
         }
       }
     }
